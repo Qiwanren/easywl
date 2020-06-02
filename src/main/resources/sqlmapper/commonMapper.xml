@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-..mybatis.org..DTD Mapper 3.0..EN" "http:..mybatis.org.dtd.mybatis-3-mapper.dtd">
+<mapper namespace="com.forms.wl.mapper.CommonMapper">
+    <resultMap id="code_map" type="com.forms.wl.entity.CommonEntity">
+        <id property="id" column="id"></id>
+        <result property="codeValue" column="code_value"></result>
+        <result property="codeDetail" column="code_detail"></result>
+        <result property="codeType" column="code_type"></result>
+        <result property="smallType" column="small_type"></result>
+        <result property="codeContent" column="code_content"></result>
+    </resultMap>
+    <select id="getBigType" parameterType="string" resultMap="code_map">
+    	SELECT DISTINCT
+				t.small_type,
+				t.code_content
+			FROM
+				ts_code_info t
+		where 1=1
+		and t.code_type = #{codeType}
+    </select>
+    <select id="getSmallType" parameterType="com.forms.wl.entity.CommonEntity" resultMap="code_map">
+    	SELECT t.code_value,
+			 t.code_detail,
+			 t.code_content
+			FROM
+				ts_code_info t
+		where 1=1
+		and t.code_type = #{codeType} and t.small_type = #{smallType}
+    </select>
+    
+    <select id="getCodeList" parameterType="string" resultMap="code_map">
+    	SELECT
+			t.code_value,
+			t.code_detail
+		FROM
+			ts_code_info t
+		where 1=1
+		<if test="smallType!=null and smallType!=''">
+		   	and t.small_type = #{smallType}
+		</if>
+    </select>
+    
+</mapper>

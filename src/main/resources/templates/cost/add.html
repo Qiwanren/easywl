@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+	<head>
+		<meta charset="UTF-8"></meta>
+		<title></title>
+	    <link rel="stylesheet" th:href="@{../public/css/amazeui.min.css}" />
+		<link rel="stylesheet" th:href="@{../public/css/admin.css}" />
+		<link rel="stylesheet" th:href="@{../public/css/app.css}" />
+		<link rel="stylesheet" th:href="@{../wl/css/cost.css}" />
+		<style>
+			.admin-main{
+				padding-top: 0px;
+			}
+		</style>
+	</head>
+	<body>
+		<div class="am-cf admin-main">
+		<!-- content start -->
+		<div class="admin-content">
+			<div class="admin-content-body">
+				<div class="am-g">
+					<form class="am-form am-form-horizontal" th:action="@{/cost/add}" enctype="multipart/form-data" method="post" onsubmit="return checkForm();">	
+						<br></br>
+						<div class="am-form-group">
+							<label for="cost_type" class="am-u-sm-3 am-form-label">
+							大类 </label>
+							<div class="cost-select-left">
+								<select id="costType" name="costType" onchange="getSmallType()">
+			                        <option value="">--请选择类别--</option>
+			                        <option th:each="info:${session.list}" th:value="${info.smallType}" th:text="${info.codeContent}"></option>
+			                    </select>
+							</div>
+							<label for="cost_type" class="am-u-sm-3 am-form-label">
+							小类 </label>
+							<div class="cost-select-right">
+								<select id="smallType" name="smallType">
+			                        <option value="">--请选择类别--</option>
+			                    </select>
+							</div>
+						</div>
+						<div class="am-form-group">
+							<label for="costNum" class="am-u-sm-3 am-form-label">
+								金&nbsp;&nbsp;额</label>
+							<div class="am-u-sm-9">
+								<input type="text" placeholder="请输入金额" 
+									id="costNum" name="costNum"  data-equal-to="#doc-vld-pwd-1"/>
+							</div>
+						</div>
+						<div class="am-form-group">
+							<label for="user-name" class="am-u-sm-3 am-form-label">
+								支出时间</label>
+							<div class="am-u-sm-9">
+								<input type="text" id="costDate" name="costDate" onclick="SelectDate(this,'yyyy-MM-dd hh:mm:ss')"/>
+							</div>
+						</div>
+						<div class="am-form-group">
+							<label class="am-u-sm-3 am-form-label">备注 </label>
+							<div class="am-u-sm-9">
+								<textarea id="costContent" name="costContent" placeholder="请输入内容"></textarea>
+							</div>
+						</div>
+						<div class="am-form-group">
+							<div class="am-u-sm-9 am-u-sm-push-3">
+								<input type="submit" class="am-btn am-btn-success" value="提交" />
+							</div>
+						</div>
+					</form>
+				</div>
+			</div>
+		</div>
+	</div>
+	<script th:src="@{/public/js/jquery-1.7.2.min.js}"></script>
+	<script th:src="@{/public/js/adddate.js}"></script>
+	<script type="text/javascript">
+	function getSmallType() {
+		
+		var smallType=$("#costType ").val();
+		 
+		
+		$.ajax({
+	        url: "getSmallType",
+	        type: "post",
+	        dataType: "text",
+	        data: {
+	            smallType: smallType
+	        },
+	        success: function (data) {
+	            if (data != "fail") {
+	            	$("#smallType").empty();
+	                var map = data.split('|');
+	                $.each(map,function(n,value){
+	                	var kv = value.split(":");
+	                	var o = new Option(kv[1], kv[0]);
+	                    $("#smallType").append(o);
+	                }
+	                );
+	                	
+	            } else {
+	            	var o = new Option("---请选择---", "");
+	            	$("#smallType").empty();
+	            	$("#smallType").append(o);
+	            }
+	        }
+	    });
+	}
+	
+	function checkForm(){
+		
+		if($("#smallType ").val() == ""){
+			alert("小类没有选择，请选择小类！");
+			return false;
+		}
+		
+		if ($("input[name='costNum']").val() == "") {
+	        alert("请输入支出金额！");
+	        $("input[name='costNum']").focus();
+	        return false;
+	    }
+		
+		if ($("input[name='costDate']").val() == "") {
+	        alert("请选择支出时间！");
+	        $("input[name='costNum']").focus();
+	        return false;
+	    }
+		
+		if($("#costContent ").val() == ""){
+			alert("请输入备注信息！");
+			return false;
+		}
+	}
+	</script>
+	</body>
+</html>

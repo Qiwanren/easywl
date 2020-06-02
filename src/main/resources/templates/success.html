@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8"></meta>
+	<title>Insert title here</title>
+	<style type="text/css">
+		body{
+			text-align: center;
+		}
+		.show{
+			margin-top:60px;
+			align:center;
+		}
+		#content{
+			margin-top:90px; 
+		}
+		
+	</style>
+	
+</head>
+<body>
+	<h3 class="show" align="center">操作成功 ！！！</h3>
+	<div id="content">
+		请选择操作：<a th:href="${session.R_URL}" target="right"><span th:text="${session.R_URL_CONTENT}"></span></a>
+		&nbsp;&nbsp;&nbsp;&nbsp;<a th:href="@{/toIndex}" target="right">返回首页</a>
+	</div>
+</body>
+</html>

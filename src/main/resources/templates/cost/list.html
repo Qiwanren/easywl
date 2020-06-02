@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+	<head>
+		<meta charset="UTF-8"></meta>
+		<title></title>
+		<link rel="stylesheet" th:href="@{/public/css/amazeui.min.css}" />
+		<link rel="stylesheet" th:href="@{/public/css/admin.css}" />
+		
+	</head>
+
+	<body>
+		<div class="admin-content-body">
+			<div class="am-cf am-padding am-padding-bottom-0">
+				<div class="am-fl am-cf"><strong class="am-text-primary am-text-lg">列表展示</strong><small></small></div>
+			</div>
+			<div class="am-g">
+				<div class="am-u-sm-12 am-u-md-3">
+				</div>
+				<div class="am-u-sm-12 am-u-md-3">
+					<div class="am-input-group am-input-group-sm">
+						<input type="text" class="am-form-field"/>
+						<span class="am-input-group-btn">
+            				<button class="am-btn am-btn-default" type="button">搜索</button>
+          				</span>
+					</div>
+				</div>
+			</div>
+			<div class="am-g">
+				<div class="am-u-sm-12">
+					<form class="am-form">
+						<table class="am-table am-table-striped am-table-hover table-main">
+							<thead>
+								<tr>
+									<th>发生时间</th>
+									<th>消费金额</th>
+									<th>消费类型</th>
+									<th>备注</th>
+									<th>操作</th>
+								</tr>
+							</thead>
+							<tbody>
+								<tr th:each="info : ${list}">
+									<td th:text="${info.costDate}"></td>
+									<td th:text="${info.costNum}"></td>
+									<td th:text="${info.smallType}"></td>
+									<td th:text="${info.costContent}"></td>
+									<td>
+										<div class="am-btn-toolbar">
+											<div class="am-btn-group am-btn-group-xs">
+												<a class="am-btn am-btn-default am-btn-xs am-text-secondary" th:href="@{'/cost/toEdit?costId='+${info.costId}}">编辑</a>
+												<a class="am-btn am-btn-default am-btn-xs am-text-danger am-hide-sm-only" th:href="@{'/cost/delete?costId='+${info.costId}}">删除</a>
+											</div>
+										</div>
+									</td>
+								</tr>
+							</tbody>
+						</table>
+						<div class="am-cf">
+							共  <span id="total" th:text="${pageInfo.total}">&nbsp;&nbsp;</span> 条记录
+							<div class="am-fr">
+								<ul class="am-pagination">
+									<li>
+										<a href="#" onclick="toBefore()">上一页</a>
+									</li>
+									<li>
+										<a href="#" onclick="toNum(1)">1</a>
+									</li>
+									<li>
+										<a href="#" onclick="toNum(2)">2</a>
+									</li>
+									<li>
+										<a href="#" onclick="toNum(3)">3</a>
+									</li>
+									<li>
+										<a href="#" onclick="toNum(4)">4</a>
+									</li>
+									<li>
+										<a href="#" onclick="toNum(5)">5</a>
+									</li>
+									<li class="am-disabled">
+										<a href="#"> 共&nbsp;&nbsp;<span id="pages" th:text="${pageInfo.pages}">&nbsp;&nbsp;页</span></a>
+									</li>
+									<li class="am-disabled">
+										<a href="#">当前页：<span id="pageNum" th:text="${pageInfo.pageNum}"></span></a>
+									</li>
+									<li>
+										<a href="#" onclick="toNext()">下一页</a>
+									</li>
+								</ul>
+							</div>
+						</div>
+						<hr/>
+					</form>
+				</div>
+			</div>
+		</div>
+		<script th:src="@{/public/js/jquery-1.7.2.min.js}"></script>
+		<script th:src="@{/public/js/page.js}"></script>
+		<script type="text/javascript">
+			function toEdit(costId){
+				alert("edit : costId = " + costId);
+			}
+			
+			function toDelete(costId){
+				alert("delete : costId = " + costId);
+			}
+		</script>
+	</body>
+</html>

@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.forms.wl.action.basic.login.mapper.UserMapper">
+    <resultMap id="user_map" type="com.forms.wl.action.basic.login.entity.UserInfo">
+        <id property="userId" column="user_id"></id>
+        <result property="userName" column="user_name"></result>
+        <result property="status" column="status"></result>
+        <result property="loginId" column="login_id"></result>
+        <result property="userSex" column="user_sex"></result>
+        <result property="department" column="department"></result>
+        <result property="userAge" column="user_age"></result>
+        <result property="content" column="content"></result>
+        <result property="password" column="password"></result>
+    </resultMap>
+	
+    <select id="findUserByLoginId" parameterType="string" resultMap="user_map">
+        SELECT u.* FROM ts_user_info u WHERE login_id = #{loginId};
+    </select>
+    
+    <select id="findRolesByUserId" parameterType="string" resultType="string">
+        SELECT
+			t.rid
+		FROM
+			ts_user_role_info t
+		WHERE
+			t1.user_id = #{userId};
+    </select>
+    <select id="findModulesByRoleId" parameterType="string" resultType="string">
+        SELECT
+			t.mid
+		FROM
+			ts_role_module_info t
+		WHERE
+			t1.role_id = #{roleId};
+    </select>
+    <select id="getUsers" resultMap="user_map" parameterType="com.forms.wl.action.basic.login.entity.UserInfo">
+    	SELECT
+			t.task_id,
+			t.task_name,
+			t.`status`,
+			t.strategy_id,
+			t.content,
+			t.add_time
+		FROM
+			user t
+			 where 1=1
+			<if test="taskName!=null and taskName!=''">
+			   	and t.task_name like CONCAT(CONCAT('%', #{taskName}), '%')
+			</if>
+			limit #{startPage} , #{pageSize}
+    </select>
+    
+    <insert id="register" parameterType="com.forms.wl.action.basic.login.entity.UserInfo">
+        insert into user (uid,username,real_name,password,birthday,sex,status)
+        values (#{uid}, #{username}, #{realName}, #{password}, #{birthday}, #{sex}, '11')
+    </insert>
+    
+    
+</mapper>

@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-..mybatis.org..DTD Mapper 3.0..EN" "http:..mybatis.org.dtd.mybatis-3-mapper.dtd">
+<mapper namespace="com.forms.wl.mapper.wl.cost.CostManagerMapper">
+    <resultMap id="code_map" type="com.forms.wl.entity.wl.cost.CostManagerEntity">
+        <id property="costId" column="cost_id"></id>
+        <result property="costType" column="cost_type"></result>
+        <result property="costTypeContent" column="cost_type_content"></result>
+        <result property="costNum" column="cost_num"></result>
+        <result property="costContent" column="cost_content"></result>
+        <result property="costDate" column="cost_date"></result>
+        <result property="costUser" column="cost_user"></result>
+        <result property="addUser" column="add_user"></result>
+        <result property="addDate" column="add_date"></result>
+        <result property="addTime" column="add_time"></result>
+        <result property="smallType" column="small_type"></result>
+        <result property="smallTypeContent" column="small_type_content"></result>
+    </resultMap>
+    <insert id="add" parameterType="com.forms.wl.entity.wl.cost.CostManagerEntity">
+      insert into ts_cost_info (cost_id,cost_type,cost_num,cost_content,cost_date,cost_user,add_date,add_time,small_type)
+      values (#{costId}, #{costType}, #{costNum}, #{costContent}, #{costDate}, #{costUser}, #{addDate}, #{addTime}, #{smallType})
+    </insert>
+    
+    <select id="list" parameterType="com.forms.wl.entity.wl.cost.CostManagerEntity" resultMap="code_map">
+    	SELECT
+    		t.cost_id,
+			t.cost_date,
+			t1.code_detail small_type,
+			t.cost_num,
+			t.cost_content
+		FROM
+			ts_cost_info t
+			left join ts_code_info t1 on t1.code_value = t.small_type 
+		where 1=1
+		<if test="costDate!=null and costDate!=''">
+		   	and t.cost_date = #{costDate}
+		</if>
+		<if test="costType!=null and costType!=''">
+		   	and t.cost_type = #{costType}
+		</if>
+    </select>
+    
+    <select id="findById" parameterType="String" resultMap="code_map">
+    	SELECT
+			t.cost_id,
+			t.cost_date,
+			t.cost_type,
+			t1.code_detail cost_type_content,
+			t.small_type,
+			t1.code_content small_type_content,
+			t.cost_num,
+			t.cost_content
+		FROM
+			ts_cost_info t
+		LEFT JOIN ts_code_info t1 ON t1.code_value = t.small_type
+		WHERE t.cost_id = #{costId}
+    </select>
+    
+    <update id="edit" parameterType="com.forms.wl.entity.wl.cost.CostManagerEntity">
+    	update ts_cost_info t set t.cost_date=#{costDate},t.cost_type=#{costType},t.cost_num=#{costNum},t.cost_content=#{costContent}
+    	where t.cost_id = #{costId}
+    </update>
+    <delete id="delete" parameterType="String">
+    	delete from ts_cost_info where cost_id = #{costId}
+    </delete>
+    
+</mapper>
