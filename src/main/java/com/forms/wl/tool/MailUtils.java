@@ -107,7 +107,7 @@ public class MailUtils {
     				"this is sendMail test !!!" +
     				"</td></tr></table></body></html>";
 
-		ds.sendMessage("qiwr3@chinaunicom.cn", message, "测试邮件");
+		ds.sendMessage("qwanhong@126.com", message, "测试邮件");
 	}
 	
 }
